@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, Html, Environment, Center, PresentationControls, OrbitControls, SpotLight, Sphere } from '@react-three/drei'
+import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, Html, Environment, Center, PresentationControls, OrbitControls, SpotLight, Sphere, Sparkles } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { RGBELoader } from 'three-stdlib'
 import { HexColorPicker } from 'react-colorful'
@@ -19,12 +19,16 @@ function Ring({ map, position, ...props }) {
 
       {Object.keys(nodes).map(n => {
         const node = nodes[n]
-        return <mesh castShadow receiveShadow key={n}
-                     position={node.position}
-                     rotation={node.rotation}
-                     scale={node.scale}
-                     geometry={node.geometry} material={node.material}>
-          {node.name.includes('Diamond') && <MeshRefractionMaterial envMap={map} ior={8} aberrationStrength={0.02} toneMapped={false} />}
+        return <mesh
+          castShadow={true}
+          receiveShadow={true} key={n}
+          position={node.position}
+          rotation={node.rotation}
+          scale={node.scale}
+
+          geometry={node.geometry} material={node.material}>
+          {node.name.includes('Diamond') && <MeshRefractionMaterial envMap={map} bounces={7} ior={5} aberrationStrength={0.02} fresnel={4} toneMapped={false} />}
+
         </mesh>
       })}
 
@@ -60,15 +64,23 @@ export default function App() {
         <Suspense fallback={null}>
           <Ring map={texture} scale={1} position={[0, 0, 0]} />
 
+
         </Suspense>
 
-        <RandomizedLight amount={18} radius={10} ambient={1.5} position={[0, 2, 0]} bias={0.01} size={3} />
+        <AccumulativeShadows    alphaTest={0.95} opacity={1} scale={20}>
+          <RandomizedLight amount={8} radius={10} ambient={0.5} position={[0, 10, -2.5]} bias={0.001} size={3} />
+        </AccumulativeShadows>
 
       </group>
-
       <EffectComposer>
-        <Bloom luminanceThreshold={1} intensity={0.95} levels={9} mipmapBlur />
+        <Bloom luminanceThreshold={1} intensity={0.85}  luminanceSmoothing={0.1} height={100} />
       </EffectComposer>
+
+      {/*<EffectComposer>*/}
+      {/*  <Bloom luminanceThreshold={1} intensity={0.95} levels={9} mipmapBlur />*/}
+      {/*</EffectComposer>*/}
+
+
     </Canvas>
   )
 }
