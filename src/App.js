@@ -24,7 +24,7 @@ function Ring({ map, position, ...props }) {
                      rotation={node.rotation}
                      scale={node.scale}
                      geometry={node.geometry} material={node.material}>
-          {node.name.includes('Diamond') && <MeshRefractionMaterial envMap={map} ior={6} aberrationStrength={0.02} toneMapped={false} />}
+          {node.name.includes('Diamond') && <MeshRefractionMaterial envMap={map} ior={8} aberrationStrength={0.02} toneMapped={false} />}
         </mesh>
       })}
 
@@ -35,7 +35,7 @@ function Ring({ map, position, ...props }) {
 
 
 export default function App() {
-  const texture = useLoader(RGBELoader, 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/peppermint_powerplant_2_1k.hdr')
+  const texture = useLoader(RGBELoader, './environment_new_dark.hdr')
   texture.mapping = THREE.EquirectangularReflectionMapping
 
 
@@ -62,7 +62,7 @@ export default function App() {
 
         </Suspense>
 
-        <RandomizedLight amount={8} radius={10} ambient={1.5} position={[0, 4, 0]} bias={0.01} size={3} />
+        <RandomizedLight amount={18} radius={10} ambient={1.5} position={[0, 2, 0]} bias={0.01} size={3} />
 
       </group>
 
