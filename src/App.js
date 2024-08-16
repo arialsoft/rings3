@@ -5,6 +5,7 @@ import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, 
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { RGBELoader } from 'three-stdlib'
 import { HexColorPicker } from 'react-colorful'
+import { Color } from 'three'
 
 function Ring({ map, position, ...props }) {
 
@@ -18,7 +19,16 @@ function Ring({ map, position, ...props }) {
     <group {...props} dispose={null}>
 
       {Object.keys(nodes).map(n => {
-        const node = nodes[n]
+        const node = nodes[n];
+
+        const material = node.material;
+        if(material  && material.name=='metal') {
+
+          material.color = new Color('#f7e2ad')
+
+        }
+
+
         return <mesh
           castShadow={true}
           receiveShadow={true} key={n}
@@ -47,8 +57,8 @@ export default function App() {
     <Canvas>
       <color attach="background" args={['#fff']} />
       <ambientLight intensity={5} />
-      <directionalLight         position={[0, 2, 2]}        intensity={1}      />
-      <directionalLight         position={[0, 2, -2]}        intensity={1}      />
+      {/*<directionalLight         position={[0, 2, 2]}        intensity={1}      />*/}
+      {/*<directionalLight         position={[0, 2, -2]}        intensity={1}      />*/}
       <Environment map={texture} />
       <OrbitControls
         autoRotate={true}
