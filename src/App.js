@@ -1,19 +1,17 @@
 import * as THREE from 'three'
-import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { Suspense, useRef } from 'react'
+import { Canvas, useLoader } from '@react-three/fiber'
 import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, Html, Environment, Center, PresentationControls, OrbitControls, SpotLight, Sphere, Sparkles } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { RGBELoader } from 'three-stdlib'
-import { HexColorPicker } from 'react-colorful'
-import { Color } from 'three'
+ import { Color } from 'three'
+import { Stats } from '@react-three/drei'
 
 function Ring({ map, position, ...props }) {
 
-  const ringRef = useRef()
 
 
   const { nodes, materials } = useGLTF('/ring3.glb')
-  const groupRef = useRef()
 
   return (<mesh position={position}>
     <group {...props} dispose={null}>
@@ -22,7 +20,7 @@ function Ring({ map, position, ...props }) {
         const node = nodes[n];
 
         const material = node.material;
-        if(material  && material.name=='metal') {
+        if(material  && material.name==='metal') {
 
           material.color = new Color('#f7e2ad')
 
@@ -31,13 +29,17 @@ function Ring({ map, position, ...props }) {
 
         return <mesh
           castShadow={true}
-          receiveShadow={true} key={n}
+          receiveShadow={true}
+          key={n}
           position={node.position}
           rotation={node.rotation}
           scale={node.scale}
 
-          geometry={node.geometry} material={node.material}>
-          {node.name.includes('Diamond') && <MeshRefractionMaterial envMap={map} bounces={7} ior={5} aberrationStrength={0.02} fresnel={4} toneMapped={false} />}
+          geometry={node.geometry}
+          material={node.material}
+        >
+          {n==='Diamond' && <MeshRefractionMaterial envMap={map} bounces={7} ior={8} aberrationStrength={0.04} fresnel={8} toneMapped={false} />}
+          {n.includes('Diamond0') && <MeshRefractionMaterial envMap={map} bounces={4} ior={4} aberrationStrength={0.04} fresnel={8} toneMapped={false} />}
 
         </mesh>
       })}
@@ -80,15 +82,15 @@ export default function App() {
         </AccumulativeShadows>
 
       </group>
-      <EffectComposer>
-        <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={300} />
-      </EffectComposer>
+      {/*<EffectComposer>*/}
+      {/*  <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={300} />*/}
+      {/*</EffectComposer>*/}
 
       {/*<EffectComposer>*/}
       {/*  <Bloom luminanceThreshold={1} intensity={0.95} levels={9} mipmapBlur />*/}
       {/*</EffectComposer>*/}
 
-
+      <Stats />
     </Canvas>
   )
 }
