@@ -38,8 +38,8 @@ function Ring({ map, position, ...props }) {
           geometry={node.geometry}
           material={node.material}
         >
-          {n==='Diamond' && <MeshRefractionMaterial envMap={map} bounces={7} ior={8} aberrationStrength={0.04} fresnel={8} toneMapped={false} />}
-          {n.includes('Diamond0') && <MeshRefractionMaterial envMap={map} bounces={4} ior={4} aberrationStrength={0.04} fresnel={8} toneMapped={false} />}
+          {n==='Diamond' && <MeshRefractionMaterial fastChroma={true} envMap={map} bounces={7} ior={8} aberrationStrength={0.04} fresnel={0.8} toneMapped={false} />}
+          {n.includes('Diamond0') && <MeshRefractionMaterial fastChroma={true} envMap={map} bounces={3} ior={4} aberrationStrength={0.04} fresnel={0.8} toneMapped={false} />}
 
         </mesh>
       })}
