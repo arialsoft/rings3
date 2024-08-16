@@ -54,6 +54,7 @@ export default function App() {
       {/*/>*/}
       <Environment map={texture} />
       <OrbitControls
+        autoRotate={true}
         enablePan={true}
         enableZoom={false}
         enableRotate={true}
@@ -73,7 +74,7 @@ export default function App() {
 
       </group>
       <EffectComposer>
-        <Bloom luminanceThreshold={1} intensity={0.85}  luminanceSmoothing={0.1} height={100} />
+        <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={200} />
       </EffectComposer>
 
       {/*<EffectComposer>*/}
