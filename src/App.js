@@ -47,11 +47,8 @@ export default function App() {
     <Canvas>
       <color attach="background" args={['#fff']} />
       <ambientLight intensity={5} />
-      {/*<directionalLight*/}
-      {/*   position={[0, 1, 0]}*/}
-      {/*  intensity={1}*/}
-
-      {/*/>*/}
+      <directionalLight         position={[0, 2, 2]}        intensity={1}      />
+      <directionalLight         position={[0, 2, -2]}        intensity={1}      />
       <Environment map={texture} />
       <OrbitControls
         autoRotate={true}
@@ -74,7 +71,7 @@ export default function App() {
 
       </group>
       <EffectComposer>
-        <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={200} />
+        <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={300} />
       </EffectComposer>
 
       {/*<EffectComposer>*/}
