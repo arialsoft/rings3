@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import { Suspense, useRef } from 'react'
 import { Canvas, useLoader } from '@react-three/fiber'
-import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, Html, Environment, Center, PresentationControls, OrbitControls, SpotLight, Sphere, Sparkles } from '@react-three/drei'
+import { useGLTF, AccumulativeShadows, MeshRefractionMaterial, RandomizedLight, Html, Environment, Center, PresentationControls, OrbitControls, SpotLight, Sphere, Sparkles, useCubeTexture } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { RGBELoader } from 'three-stdlib'
- import { Color } from 'three'
+ import { Color, ImageUtils, TextureLoader } from 'three'
 import { Stats } from '@react-three/drei'
 
 function Ring({ map, position, ...props }) {
@@ -38,7 +38,7 @@ function Ring({ map, position, ...props }) {
           geometry={node.geometry}
           material={node.material}
         >
-          {n==='Diamond' && <MeshRefractionMaterial fastChroma={true} envMap={map} bounces={7} ior={8} aberrationStrength={0.04} fresnel={0.8} toneMapped={false} />}
+          {n==='Diamond' && <MeshRefractionMaterial fastChroma={true} envMap={map} bounces={5} ior={5} aberrationStrength={0.04} fresnel={0.8} toneMapped={false} />}
           {n.includes('Diamond0') && <MeshRefractionMaterial fastChroma={true} envMap={map} bounces={3} ior={4} aberrationStrength={0.04} fresnel={0.8} toneMapped={false} />}
 
         </mesh>
@@ -52,13 +52,19 @@ function Ring({ map, position, ...props }) {
 
 export default function App() {
   const texture = useLoader(RGBELoader, './environment_new_dark.hdr')
-  texture.mapping = THREE.EquirectangularReflectionMapping
+  const texture2 = useLoader(RGBELoader, './aerodynamics_workshop_1k.hdr')
 
+  const texture3=  useLoader(TextureLoader, './environment/RoomA_py.jpg')
+  texture.mapping = THREE.EquirectangularReflectionMapping
+  const envMap = useCubeTexture(
+    ['RoomA_px.jpg', 'RoomA_nx.jpg', 'RoomA_py.jpg', 'RoomA_ny.jpg', 'RoomA_pz.jpg', 'RoomA_nz.jpg'],
+    { path: '/environment/' }
+  )
 
   return (
-    <Canvas>
+    <Canvas  gl={{ antialias: false }} style={{height:'600px', width:'600px', margin:'auto auto'}} >
       <color attach="background" args={['#fff']} />
-      <ambientLight intensity={5} />
+      <ambientLight intensity={3} />
       {/*<directionalLight         position={[0, 2, 2]}        intensity={1}      />*/}
       {/*<directionalLight         position={[0, 2, -2]}        intensity={1}      />*/}
       <Environment map={texture} />
@@ -77,18 +83,16 @@ export default function App() {
 
         </Suspense>
 
-        <AccumulativeShadows    alphaTest={0.95} opacity={1} scale={20}>
-          <RandomizedLight amount={8} radius={10} ambient={0.5} position={[0, 10, -2.5]} bias={0.001} size={3} />
-        </AccumulativeShadows>
+           <RandomizedLight amount={4} radius={10} ambient={0.5} position={[0, 4, -2.5]} bias={0.01} size={3} />
 
       </group>
       {/*<EffectComposer>*/}
       {/*  <Bloom luminanceThreshold={1} intensity={0.65}  luminanceSmoothing={0.05} height={300} />*/}
       {/*</EffectComposer>*/}
 
-      {/*<EffectComposer>*/}
-      {/*  <Bloom luminanceThreshold={1} intensity={0.95} levels={9} mipmapBlur />*/}
-      {/*</EffectComposer>*/}
+      <EffectComposer>
+        {/*<Bloom luminanceThreshold={1} intensity={0.85} levels={9} mipmapBlur />*/}
+      </EffectComposer>
 
       <Stats />
     </Canvas>
