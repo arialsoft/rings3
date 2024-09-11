@@ -11,7 +11,7 @@ function Ring({ map, position, ...props }) {
 
 
 
-  const { nodes, materials } = useGLTF('/ring3.glb')
+  const { nodes, materials } = useGLTF('/ring_clean.glb')
 
   return (<mesh position={position}>
     <group {...props} dispose={null}>
